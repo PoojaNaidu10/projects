@@ -24,4 +24,4 @@ const AuthorModel = mongoose.Schema({
         required: true}
 
 }, { timestamps: true })
-module.exports=mongoose.model("AuthorModel",AuthorModel)
+module.exports=mongoose.model("authorsproject",AuthorModel)

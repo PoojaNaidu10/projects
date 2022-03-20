@@ -12,21 +12,19 @@ const isValid = function (value) {
 const isTitleValid = function (title) {
   return ['Mr', 'Mrs', 'Miss'].indexOf(title) !== -1
 }
-const BodyReqValid = function (requestBody) {
+const isBodyRequestValid = function (requestBody) {
   return Object.keys(requestBody).length > 0
 }
 // ======================================================================================================
 const CreateAuthor = async function (req, res) {
   try {
     const requestBody = req.body;
-    if (!BodyReqValid(requestBody)) {
-      
-      res.status(400).send({ status: false, message: 'invalid input,do provide author details' })
+    if (!isBodyRequestValid(requestBody)) {
+      res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide author details' })
       return
     }
     // Extracting params
     const { fname, lname, title, email, password } = requestBody;
-
     // Validation from here-------------------------------------------------------------------------------
     if (!isValid(fname)) {
       res.status(400).send({ status: false, message: 'first name needed' })
@@ -61,7 +59,7 @@ const CreateAuthor = async function (req, res) {
       res.status(400).send({ status: false, message: `${email} email already in use` })
       return
     }
-    // ends-----------------------------------------------------------------------------------------------------
+    // Validation ends---------------------------------------------------------------------------------------
     const authorData = { fname, lname, title, email, password }
 
     const newAuthor = await AuthorModel.create(authorData);
@@ -76,12 +74,11 @@ const LoginAuthor = async function (req, res) {
   try {
     const requestBody = req.body;
     const { email, password } = requestBody;
-    if (!BodyReqValid(requestBody)) {
-      
-      res.status(400).send({ status: false, message: 'invalid request ,do provide login detail properly' })
+    if (!isBodyRequestValid(requestBody)) {
+      res.status(400).send({ status: false, message: 'invalid request ,do provide login detail correctly' })
       return
     }
-    
+    // Validation begining
     if (!isValid(email)) {
       res.status(400).send({ status: false, message: `email needed` })
       return
@@ -97,7 +94,7 @@ const LoginAuthor = async function (req, res) {
     // Validation ends
     const author = await AuthorModel.findOne({ email, password });
     if (!author) {
-      res.status(401).send({ status: false, message: `invalid login data` });
+      res.status(401).send({ status: false, message: `invalid login ` });
       return
     }
     const token = await jwt.sign({
@@ -105,12 +102,9 @@ const LoginAuthor = async function (req, res) {
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + 10 * 60 * 60
     }, 'functionup-thorium')
-
     res.header('x-api-key', token);
-
-    res.status(200).send({ status: true, message: `author login is successfull now`, data: { token } });
+    res.status(200).send({ status: true, message: `Author login successfull`, data: { token } });
   } catch (error) {
-
     res.status(500).send({ status: false, message: error.message });
   }
 }

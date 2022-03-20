@@ -13,7 +13,7 @@ const blogsSchema = new mongoose.Schema({
     authorId: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: "AuthorModel"
+        ref: "authorsproject"
     },
     tags:  ["String"],
 
@@ -29,15 +29,15 @@ const blogsSchema = new mongoose.Schema({
         },
 
         publishedAt:{
-            type: Date,
-            default:null},
+            type: Date},
+            
             
     isDeleted: {
         type: Boolean,
         default: false
     },
     deletedAt:{
-        type:Date},
+        type:Date}
     
 }, { timestamps: true });
-module.exports = mongoose.model('blog1', blogsSchema)
+module.exports = mongoose.model('blog1project', blogsSchema)
